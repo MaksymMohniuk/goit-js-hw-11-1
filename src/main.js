@@ -56,6 +56,7 @@ function photoeTemplate(photoe) {
 }
 
 function renderPhotoes(photoes) {
+  containerRef.innerHTML = '';
   const markup = photoes.map(photoe => photoeTemplate(photoe)).join('');
   containerRef.insertAdjacentHTML('beforeend', markup);
 }
