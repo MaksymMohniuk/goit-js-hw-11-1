@@ -32,7 +32,7 @@ function onButtonSubmit(e) {
 }
 
 function getPhotoes(data) {
-  const url = `https://pixabay.com/api/?key=33929638-3d09c2b606ca8b58d00360aed&q=${data}?image_type:photo?orientation:horizontal?safesearch:true`;
+  const url = `https://pixabay.com/api/?key=33929638-3d09c2b606ca8b58d00360aed&q=${data}&?image_type:photo?orientation:horizontal?safesearch:true`;
 
   return fetch(url).then(res => {
     if (res.ok) {
@@ -58,5 +58,5 @@ function photoeTemplate(photoe) {
 function renderPhotoes(photoes) {
   containerRef.innerHTML = '';
   const markup = photoes.map(photoe => photoeTemplate(photoe)).join('');
-  containerRef.insertAdjacentHTML('beforeend', markup);
+  containerRef.innerHTML = markup;
 }
