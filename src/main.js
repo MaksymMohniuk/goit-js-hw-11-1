@@ -1,5 +1,7 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const inputRef = document.querySelector('#searchInput');
 const btnRef = document.querySelector('button[type="submit"]');
@@ -44,15 +46,18 @@ function getPhotoes(data) {
 }
 
 function photoeTemplate(photoe) {
-  return `<div class="card">
-  <img src="${photoe.webformatURL}" alt="${photoe.tags}">
-  <div class="card-body">
-    <p class="card-text">Likes: ${photoe.likes}</p>
-    <p class="card-text">Views: ${photoe.views}</p>
-    <p class="card-text">Comments: ${photoe.comments}</p>
-    <p class="card-text">Downloads: ${photoe.downloads}</p>
-  </div>
-</div>`;
+  return `
+  <div class="gallery">
+    <a href="images/image1.jpg"><img src="${photoe.webformatURL}" alt="${photoe.tags}" title=""/></a>
+    <a href="images/image2.jpg"><img src="${photoe.largeImageURL}" alt="${photoe.tags}" title="Beautiful Image"/></a>
+    <img src="${photoe.webformatURL}" alt="${photoe.tags}">
+    <div class="card-body">
+      <p class="card-text">Likes: ${photoe.likes}</p>
+      <p class="card-text">Views: ${photoe.views}</p>
+      <p class="card-text">Comments: ${photoe.comments}</p>
+      <p class="card-text">Downloads: ${photoe.downloads}</p>
+    </div>
+  </div>`;
 }
 
 function renderPhotoes(photoes) {
@@ -60,3 +65,10 @@ function renderPhotoes(photoes) {
   const markup = photoes.map(photoe => photoeTemplate(photoe)).join('');
   containerRef.innerHTML = markup;
 }
+
+let lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
+
+lightbox.refresh();
