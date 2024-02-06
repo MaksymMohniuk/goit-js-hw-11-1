@@ -7,12 +7,18 @@ const inputRef = document.querySelector('#searchInput');
 const btnRef = document.querySelector('button[type="submit"]');
 const formRef = document.querySelector('.js-form');
 const containerRef = document.querySelector('.form-container');
+const loaderRef = document.querySelector('.loader');
+let lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 
 btnRef.addEventListener('click', onButtonSubmit);
 
 function onButtonSubmit(e) {
   e.preventDefault();
   if (inputRef.value === '') return;
+  loaderRef.classList.add('is-shawn');
   const data = inputRef.value;
   formRef.reset();
   getPhotoes(data)
@@ -25,7 +31,9 @@ function onButtonSubmit(e) {
           position: 'topRight',
         });
       } else {
+        loaderRef.classList.remove('is-shawn');
         renderPhotoes(photoes.hits);
+        lightbox.refresh();
       }
     })
     .catch(error => {
@@ -47,9 +55,8 @@ function getPhotoes(data) {
 
 function photoeTemplate(photoe) {
   return `
-  <div class="gallery">
-    <a href="images/image1.jpg"><img src="${photoe.webformatURL}" alt="${photoe.tags}" title=""/></a>
-    <a href="images/image2.jpg"><img src="${photoe.largeImageURL}" alt="${photoe.tags}" title="Beautiful Image"/></a>
+  <li class="gallery">
+    <a href="${photoe.largeImageURL}">
     <img src="${photoe.webformatURL}" alt="${photoe.tags}">
     <div class="card-body">
       <p class="card-text">Likes: ${photoe.likes}</p>
@@ -57,7 +64,8 @@ function photoeTemplate(photoe) {
       <p class="card-text">Comments: ${photoe.comments}</p>
       <p class="card-text">Downloads: ${photoe.downloads}</p>
     </div>
-  </div>`;
+    </a>
+  </li>`;
 }
 
 function renderPhotoes(photoes) {
@@ -65,10 +73,3 @@ function renderPhotoes(photoes) {
   const markup = photoes.map(photoe => photoeTemplate(photoe)).join('');
   containerRef.innerHTML = markup;
 }
-
-let lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-});
-
-lightbox.refresh();
