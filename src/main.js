@@ -8,22 +8,18 @@ const btnRef = document.querySelector('button[type="submit"]');
 const formRef = document.querySelector('.js-form');
 const containerRef = document.querySelector('.form-container');
 const loaderRef = document.querySelector('.loader');
-let lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-});
 
 btnRef.addEventListener('click', onButtonSubmit);
 
 function onButtonSubmit(e) {
   e.preventDefault();
   if (inputRef.value === '') return;
-  loaderRef.classList.add('is-shawn');
+  loaderRef.classList.add('is-shown');
   const data = inputRef.value;
   formRef.reset();
-  getPhotoes(data)
-    .then(photoes => {
-      if (photoes.hits.length === 0) {
+  getPhotos(data)
+    .then(photos => {
+      if (photos.hits.length === 0) {
         iziToast.error({
           title: 'Sorry',
           message:
@@ -31,8 +27,8 @@ function onButtonSubmit(e) {
           position: 'topRight',
         });
       } else {
-        loaderRef.classList.remove('is-shawn');
-        renderPhotoes(photoes.hits);
+        loaderRef.classList.remove('is-shown');
+        renderPhotos(photos.hits);
         lightbox.refresh();
       }
     })
@@ -41,8 +37,8 @@ function onButtonSubmit(e) {
     });
 }
 
-function getPhotoes(data) {
-  const url = `https://pixabay.com/api/?key=33929638-3d09c2b606ca8b58d00360aed&q=${data}&?image_type:photo?orientation:horizontal?safesearch:true`;
+function getPhotos(data) {
+  const url = `https://pixabay.com/api/?key=33929638-3d09c2b606ca8b58d00360aed&q=${data}&image_type=photo?orientation=horizontal?safesearch=true`;
 
   return fetch(url).then(res => {
     if (res.ok) {
@@ -53,23 +49,27 @@ function getPhotoes(data) {
   });
 }
 
-function photoeTemplate(photoe) {
+function photoTemplate(photo) {
   return `
   <li class="gallery">
-    <a href="${photoe.largeImageURL}">
-    <img src="${photoe.webformatURL}" alt="${photoe.tags}">
+    <a href="${photo.largeImageURL}">
+    <img src="${photo.webformatURL}" alt="${photo.tags}">
     <div class="card-body">
-      <p class="card-text">Likes: ${photoe.likes}</p>
-      <p class="card-text">Views: ${photoe.views}</p>
-      <p class="card-text">Comments: ${photoe.comments}</p>
-      <p class="card-text">Downloads: ${photoe.downloads}</p>
+      <p class="card-text">Likes: ${photo.likes}</p>
+      <p class="card-text">Views: ${photo.views}</p>
+      <p class="card-text">Comments: ${photo.comments}</p>
+      <p class="card-text">Downloads: ${photo.downloads}</p>
     </div>
     </a>
   </li>`;
 }
 
-function renderPhotoes(photoes) {
+function renderPhotos(photos) {
   containerRef.innerHTML = '';
-  const markup = photoes.map(photoe => photoeTemplate(photoe)).join('');
+  const markup = photos.map(photo => photoTemplate(photo)).join('');
   containerRef.innerHTML = markup;
+  let lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+  });
 }
