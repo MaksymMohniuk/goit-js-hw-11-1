@@ -27,7 +27,7 @@ button:hover {
   background-color: #0056b3;
 }
 
-.form-container {
+.gallery {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -38,9 +38,8 @@ button:hover {
   list-style: none;
 }
 
-.form-container img {
-  width: 100%;
-  max-width: 300px;
+.gallery img {
+  flex: 1 0 33.33%;
   height: auto;
   border-radius: 5px;
 }

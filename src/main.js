@@ -6,7 +6,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const inputRef = document.querySelector('#searchInput');
 const btnRef = document.querySelector('button[type="submit"]');
 const formRef = document.querySelector('.js-form');
-const containerRef = document.querySelector('.form-container');
+const galleryRef = document.querySelector('.gallery');
 const loaderRef = document.querySelector('.loader');
 
 btnRef.addEventListener('click', onButtonSubmit);
@@ -29,7 +29,6 @@ function onButtonSubmit(e) {
       } else {
         loaderRef.classList.remove('is-shown');
         renderPhotos(photos.hits);
-        lightbox.refresh();
       }
     })
     .catch(error => {
@@ -65,11 +64,12 @@ function photoTemplate(photo) {
 }
 
 function renderPhotos(photos) {
-  containerRef.innerHTML = '';
+  galleryRef.innerHTML = '';
   const markup = photos.map(photo => photoTemplate(photo)).join('');
-  containerRef.innerHTML = markup;
+  galleryRef.innerHTML = markup;
   let lightbox = new SimpleLightbox('.gallery a', {
     captionsData: 'alt',
     captionDelay: 250,
   });
+  lightbox.refresh();
 }
