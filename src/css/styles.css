@@ -28,18 +28,18 @@ button:hover {
 }
 
 .gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
   gap: 10px;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   list-style: none;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .gallery img {
-  flex: 1 0 33.33%;
+  display: block;
+  max-width: 100%;
   height: auto;
   border-radius: 5px;
 }

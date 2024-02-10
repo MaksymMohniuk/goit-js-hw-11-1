@@ -8,18 +8,22 @@ const btnRef = document.querySelector('button[type="submit"]');
 const formRef = document.querySelector('.js-form');
 const galleryRef = document.querySelector('.gallery');
 const loaderRef = document.querySelector('.loader');
+let lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 
 btnRef.addEventListener('click', onButtonSubmit);
 
 function onButtonSubmit(e) {
   e.preventDefault();
-  if (inputRef.value === '') return;
+  const value = inputRef.value.trim();
+  if (!value) return;
   loaderRef.classList.add('is-shown');
-  const data = inputRef.value;
   formRef.reset();
-  getPhotos(data)
+  getPhotos(value)
     .then(photos => {
-      if (photos.hits.length === 0) {
+      if (!photos.hits.length) {
         iziToast.error({
           title: 'Sorry',
           message:
@@ -50,7 +54,7 @@ function getPhotos(data) {
 
 function photoTemplate(photo) {
   return `
-  <li class="gallery">
+  <li class="gallery-item">
     <a href="${photo.largeImageURL}">
     <img src="${photo.webformatURL}" alt="${photo.tags}">
     <div class="card-body">
@@ -67,9 +71,5 @@ function renderPhotos(photos) {
   galleryRef.innerHTML = '';
   const markup = photos.map(photo => photoTemplate(photo)).join('');
   galleryRef.innerHTML = markup;
-  let lightbox = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-    captionDelay: 250,
-  });
   lightbox.refresh();
 }
